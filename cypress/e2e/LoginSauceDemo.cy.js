@@ -1,10 +1,14 @@
 import { LoginSDPage } from '../pages/LoginSDPage';
 import { InventorySDPage } from '../pages/InventorySDPage';
+import { testDataUsersErr } from '../utils/testData';
 
 describe('Validar Login de SauceDemo', () => {
 
   const loginSDPage = new LoginSDPage();
   const inventorySDPage = new InventorySDPage();  
+  const usersErr = testDataUsersErr;
+
+
   beforeEach(() => {
     cy.visit('https://www.saucedemo.com/')
   });
@@ -17,9 +21,12 @@ describe('Validar Login de SauceDemo', () => {
   });
 
   it('Validar autenticación fallida con inputs inválidos', () => {
-    loginSDPage.login('invalid_user', 'secret_sauce');
-    // Validar mensaje de error
-    loginSDPage.verifyErrorMessage('Epic sadface: Username and password do not match any user in this service');
+    usersErr.forEach(user => {
+      cy.visit('https://www.saucedemo.com/')
+      loginSDPage.login(user.username, user.password);
+      // Validar mensaje de error
+      loginSDPage.verifyErrorMessage(user.message);
+    });
   });
 
 

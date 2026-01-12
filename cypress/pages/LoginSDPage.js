@@ -7,7 +7,11 @@ export class LoginSDPage {
 
     // Métodos
     fillInput(selector, text) {
-        cy.get(selector).type(text);
+        if (text === '') {
+            cy.get(selector).clear();
+        } else {
+            cy.get(selector).type(text);
+        }
     }
 
     click(selector) {
